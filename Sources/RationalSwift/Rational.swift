@@ -61,6 +61,8 @@ public struct Rational: Codable, RationalNumber {
 /// A 16-bit signed rational number value type.
 public struct Rational16: Codable, RationalNumber {
   
+  public typealias FractionalElement = UInt8
+  
   public typealias RationalStorageType = UInt8
   
   public typealias IntegerLiteralType = Int8
@@ -85,6 +87,8 @@ public struct Rational16: Codable, RationalNumber {
 
 /// A 32-bit signed rational number value type.
 public struct Rational32: Codable, RationalNumber {
+  
+  public typealias FractionalElement = UInt16
   
   public typealias RationalStorageType = UInt16
   
@@ -111,6 +115,8 @@ public struct Rational32: Codable, RationalNumber {
 /// A 64-bit signed rational number value type.
 public struct Rational64: Codable, RationalNumber {
   
+  public typealias FractionalElement = UInt32
+  
   public typealias RationalStorageType = UInt32
   
   public typealias IntegerLiteralType = Int32
@@ -135,6 +141,8 @@ public struct Rational64: Codable, RationalNumber {
 
 /// A 128-bit signed rational number value type.
 public struct Rational128: Codable, RationalNumber {
+  
+  public typealias FractionalElement = UInt64
   
   public typealias RationalStorageType = UInt64
   

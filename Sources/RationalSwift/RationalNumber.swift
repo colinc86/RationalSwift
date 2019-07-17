@@ -24,11 +24,11 @@
 import Foundation
 
 /// A fractional type represented by a numerator and denominator.
-public protocol RationalNumber: CustomStringConvertible, Hashable, SignedNumeric, Strideable where IntegerLiteralType: SignedInteger {
+public protocol RationalNumber: CustomStringConvertible, Fractional, Hashable, SignedNumeric, Strideable where IntegerLiteralType: SignedInteger {
   
   /// A rational number's storage type.
   associatedtype RationalStorageType: FixedWidthInteger, UnsignedInteger
-  
+    
   /// The magnitude of a rational number.
   associatedtype Magnitude = Self
   
@@ -59,12 +59,6 @@ public protocol RationalNumber: CustomStringConvertible, Hashable, SignedNumeric
   
   /// The sign of the rational number.
   var sign: RationalNumberSign { get set }
-  
-  /// The receiver's value as a `Double`.
-  var doubleValue: Double { get }
-  
-  /// The receiver's value as a `Float`.
-  var floatValue: Float { get }
   
   /// A boolean value indicating whether or not the receiver cannot be represented as a number.
   var isNaN: Bool { get }
@@ -105,6 +99,14 @@ public protocol RationalNumber: CustomStringConvertible, Hashable, SignedNumeric
   ///
   /// - Returns: An integer and fractional part.
   func mixed() -> MixedNumber<Self>
+  
+  /// Makes the receiver the inverse of itself.
+  mutating func makeInverse()
+  
+  /// Returns the multiplicative inverse of the receiver.
+  ///
+  /// - Returns: A fraction of the form b/a where a/b is the receiver.
+  func inverse() -> Self
   
 }
 
@@ -188,6 +190,16 @@ extension RationalNumber {
     let w = numerator / denominator
     let n = numerator - (w * denominator)
     return MixedNumber((sign == .minus ? -1 : 1) * IntegerLiteralType(w), Self.init(numerator: n, denominator: denominator, sign: .plus))
+  }
+  
+  public mutating func makeInverse() {
+    let tempNumerator = numerator
+    numerator = denominator
+    denominator = tempNumerator
+  }
+  
+  public func inverse() -> Self {
+    return Self.init(numerator: denominator, denominator: numerator, sign: sign)
   }
   
 }
@@ -421,4 +433,38 @@ public func / <T: RationalNumber>(lhs: T, rhs: T) -> T {
 /// Divides the left hand side of the operator by the right hand side and leaves the results in the left hand side.
 public func /= <T: RationalNumber>(lhs: inout T, rhs: T) {
   lhs = lhs / rhs
+}
+
+/// Returns an integer raised to a positive integer power.
+public func powr<T: FixedWidthInteger & UnsignedInteger>(_ base: T, _ exponent: UInt) -> T {
+  guard exponent > 0 else {
+    return 1
+  }
+  
+  var n = base
+  for _ in 0 ..< exponent - 1 {
+    n *= base
+  }
+  return n
+}
+
+/// Raises the left hand side of the operator to the power of the right hand side.
+public func ^ <T: RationalNumber>(lhs: T, rhs: Int) -> T {
+  let urhs = UInt(abs(rhs))
+  
+  if rhs >= 0 {
+    let numerator = powr(lhs.numerator, urhs)
+    let denominator = powr(lhs.denominator, urhs)
+    return rhs % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: lhs.sign)
+  }
+  else {
+    let numerator = powr(lhs.denominator, urhs)
+    let denominator = powr(lhs.numerator, urhs)
+    return rhs % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: lhs.sign)
+  }
+}
+
+/// Raises the left hand side of the operator to the power of the right hand side.
+public func ^= <T: RationalNumber>(lhs: inout T, rhs: Int) {
+  lhs = lhs ^ rhs
 }

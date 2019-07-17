@@ -330,6 +330,12 @@ final class RationalNumberTests: XCTestCase {
     XCTAssertEqual(MixedNumber(0, r), m)
   }
   
+  func testInverse() {
+    let r = Rational(numerator: 1, denominator: 2, sign: .minus)
+    let r2 = Rational(numerator: 2, denominator: 1, sign: .minus)
+    XCTAssertEqual(r.inverse(), r2)
+  }
+  
   // MARK: Equatable protocol
   
   func testEqual_01() {
@@ -655,6 +661,60 @@ final class RationalNumberTests: XCTestCase {
     XCTAssertEqual(r1 / r2, r3)
   }
   
+  func testExponentiation_01() {
+    let r = Rational(numerator: 2, denominator: 3)
+    let e = 0
+    XCTAssertEqual(r ^ e, Rational(numerator: 1, denominator: 1))
+  }
+  
+  func testExponentiation_02() {
+    let r = Rational(numerator: 2, denominator: 3)
+    let e = 2
+    XCTAssertEqual(r ^ e, Rational(numerator: 4, denominator: 9))
+  }
+  
+  func testExponentiation_03() {
+    let r = Rational(numerator: 2, denominator: 3)
+    let e = 3
+    XCTAssertEqual(r ^ e, Rational(numerator: 8, denominator: 27))
+  }
+  
+  func testExponentiation_04() {
+    let r = Rational(numerator: -2, denominator: 3)
+    let e = 2
+    XCTAssertEqual(r ^ e, Rational(numerator: 4, denominator: 9))
+  }
+  
+  func testExponentiation_05() {
+    let r = Rational(numerator: -2, denominator: 3)
+    let e = 3
+    XCTAssertEqual(r ^ e, Rational(numerator: -8, denominator: 27))
+  }
+  
+  func testExponentiation_06() {
+    let r = Rational(numerator: 2, denominator: 3)
+    let e = -2
+    XCTAssertEqual(r ^ e, Rational(numerator: 9, denominator: 4))
+  }
+  
+  func testExponentiation_07() {
+    let r = Rational(numerator: 2, denominator: 3)
+    let e = -3
+    XCTAssertEqual(r ^ e, Rational(numerator: 27, denominator: 8))
+  }
+  
+  func testExponentiation_08() {
+    let r = Rational(numerator: -2, denominator: 3)
+    let e = -2
+    XCTAssertEqual(r ^ e, Rational(numerator: 9, denominator: 4))
+  }
+  
+  func testExponentiation_09() {
+    let r = Rational(numerator: -2, denominator: 3)
+    let e = -3
+    XCTAssertEqual(r ^ e, Rational(numerator: -27, denominator: 8))
+  }
+  
   static var allTests = [
     ("testMaxValue", testMaxValue),
     ("testMinValue", testMinValue),
@@ -752,6 +812,16 @@ final class RationalNumberTests: XCTestCase {
     ("testDivision_01", testDivision_01),
     ("testDivision_02", testDivision_02),
     ("testDivision_03", testDivision_03),
+    ("testDivision_04", testDivision_04),
+    ("testExponentiation_01", testExponentiation_01),
+    ("testExponentiation_02", testExponentiation_02),
+    ("testExponentiation_03", testExponentiation_03),
+    ("testExponentiation_04", testExponentiation_04),
+    ("testExponentiation_05", testExponentiation_05),
+    ("testExponentiation_06", testExponentiation_06),
+    ("testExponentiation_07", testExponentiation_07),
+    ("testExponentiation_08", testExponentiation_08),
+    ("testExponentiation_09", testExponentiation_09),
   ]
   
 }
