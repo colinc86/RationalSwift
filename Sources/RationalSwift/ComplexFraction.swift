@@ -27,13 +27,10 @@ import Foundation
 /// from the `Fractional` protocol.
 public struct ComplexFraction<T: Fractional>: Fractional {
   
-  /// The numerator and denominator's type.
   public typealias FractionalElement = T
   
-  /// The complex fraction's numerator.
   public var numerator: FractionalElement
   
-  /// The complex fraction's denominator.
   public var denominator: FractionalElement
   
   public init(numerator: FractionalElement, denominator: FractionalElement) {

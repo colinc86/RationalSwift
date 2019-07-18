@@ -436,7 +436,7 @@ public func /= <T: RationalNumber>(lhs: inout T, rhs: T) {
 }
 
 /// Returns an integer raised to a positive integer power.
-public func powr<T: FixedWidthInteger & UnsignedInteger>(_ base: T, _ exponent: UInt) -> T {
+private func powi<T: FixedWidthInteger & UnsignedInteger>(_ base: T, _ exponent: UInt) -> T {
   guard exponent > 0 else {
     return 1
   }
@@ -448,23 +448,28 @@ public func powr<T: FixedWidthInteger & UnsignedInteger>(_ base: T, _ exponent: 
   return n
 }
 
-/// Raises the left hand side of the operator to the power of the right hand side.
-public func ^ <T: RationalNumber>(lhs: T, rhs: Int) -> T {
-  let urhs = UInt(abs(rhs))
+/// Returns a rational number raised to a integer power.
+public func powr<T: RationalNumber>(_ base: T, _ exponent: Int) -> T {
+  let urhs = UInt(abs(exponent))
   
-  if rhs >= 0 {
-    let numerator = powr(lhs.numerator, urhs)
-    let denominator = powr(lhs.denominator, urhs)
-    return rhs % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: lhs.sign)
+  if exponent >= 0 {
+    let numerator = powi(base.numerator, urhs)
+    let denominator = powi(base.denominator, urhs)
+    return exponent % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: base.sign)
   }
   else {
-    let numerator = powr(lhs.denominator, urhs)
-    let denominator = powr(lhs.numerator, urhs)
-    return rhs % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: lhs.sign)
+    let numerator = powi(base.denominator, urhs)
+    let denominator = powi(base.numerator, urhs)
+    return exponent % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: base.sign)
   }
 }
 
 /// Raises the left hand side of the operator to the power of the right hand side.
+public func ^ <T: RationalNumber>(lhs: T, rhs: Int) -> T {
+  return powr(lhs, rhs)
+}
+
+/// Raises the left hand side of the operator to the power of the right hand side.
 public func ^= <T: RationalNumber>(lhs: inout T, rhs: Int) {
-  lhs = lhs ^ rhs
+  lhs = powr(lhs, rhs)
 }
