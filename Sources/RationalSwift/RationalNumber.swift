@@ -24,7 +24,7 @@
 import Foundation
 
 /// A fractional type represented by a numerator and denominator.
-public protocol RationalNumber: CustomStringConvertible, Fractional, Hashable, SignedNumeric, Strideable where IntegerLiteralType: SignedInteger {
+public protocol RationalNumber: CustomStringConvertible, Hashable, SignedNumeric, Strideable where IntegerLiteralType: SignedInteger {
   
   /// A rational number's storage type.
   associatedtype RationalStorageType: FixedWidthInteger, UnsignedInteger
@@ -462,14 +462,4 @@ public func powr<T: RationalNumber>(_ base: T, _ exponent: Int) -> T {
     let denominator = powi(base.numerator, urhs)
     return exponent % 2 == 0 ? T.init(numerator: numerator, denominator: denominator, sign: .plus) : T.init(numerator: numerator, denominator: denominator, sign: base.sign)
   }
-}
-
-/// Raises the left hand side of the operator to the power of the right hand side.
-public func ^ <T: RationalNumber>(lhs: T, rhs: Int) -> T {
-  return powr(lhs, rhs)
-}
-
-/// Raises the left hand side of the operator to the power of the right hand side.
-public func ^= <T: RationalNumber>(lhs: inout T, rhs: Int) {
-  lhs = powr(lhs, rhs)
 }
