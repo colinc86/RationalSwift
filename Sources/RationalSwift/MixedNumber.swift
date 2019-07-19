@@ -32,6 +32,14 @@ public struct MixedNumber<T: RationalNumber>: Equatable {
   /// The fractional part of the mixed number.
   public var fractionalPart: T
   
+  public var doubleValue: Double {
+    return Double(integerPart) + fractionalPart.doubleValue
+  }
+  
+  public var floatValue: Float {
+    return Float(integerPart) + fractionalPart.floatValue
+  }
+  
   // MARK: Initializers
   
   /// Initializes a mixed number with an integer and fractionl part.
